@@ -33,9 +33,9 @@ const Feed = () => {
         {/* Feed Title */}
         <Box p={2} sx={{overflowY:"auto", height:"90vh", flex:2}}>
           <Typography variant='h4' fontWeight="bold" mb={2} sx={{color:'white'}}>{selectedCategory} <span style={{color:"#F31503"}}>Videos</span></Typography>
+        <Video videos={videos}/>
         </Box>
         {/* Video Content of Feed */}
-        <Video videos={videos}/>
       </Stack>
     </>
   )
