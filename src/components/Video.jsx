@@ -2,7 +2,7 @@ import React from 'react'
 
 const Video = () => {
   return (
-    <div>Video</div>
+    <div style={{color:"white"}}>Video</div>
   )
 }
 
