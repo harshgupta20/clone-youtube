@@ -8,11 +8,11 @@ import { fetchFromAPI } from '../utils/FetchFromAPI';
 const SearchFeed = () => {
 
   const [videos, setVideos] = useState([]);
-  const [SearchTerm] = useParams();
+  const {searchTerm} = useParams();
 
   useEffect(() => {
-    fetchFromAPI(`search?part=snippet&q=${SearchTerm}`).then((data) => setVideos(data.items));
-  }, [SearchTerm])
+    fetchFromAPI(`search?part=snippet&q=${searchTerm}`).then((data) => setVideos(data.items));
+  }, [searchTerm])
 
   console.log("start");
   console.log(videos);
@@ -22,7 +22,7 @@ const SearchFeed = () => {
         {/* Feed Body */}
         <Box p={2} sx={{ overflowY: "auto", height: "90vh", flex: 2 }}>
           {/* Feed Title */}
-          <Typography variant='h4' fontWeight="bold" mb={2} sx={{ color: 'white' }}>Search Videos for :  <span style={{ color: "#F31503" }}>{SearchTerm}</span> Video</Typography>
+          <Typography variant='h4' fontWeight="bold" mb={2} sx={{ color: 'white' }}>Search Results for :  "<span style={{ color: "#F31503" }}>{searchTerm}</span>"</Typography>
           {/* Video Content of Feed */}
           <Video videos={videos} />
         </Box>
