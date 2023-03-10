@@ -3,12 +3,17 @@ import React from 'react'
 import ChannelCard from './ChannelCard';
 import VideoCard from './VideoCard';
 
-const Video = ({videos}) => {
+const Video = ({videos, direction}) => {
   
+  if(!videos?.length){
+      return "Loading...";
+  }
+
+
   console.log(videos);
   return (
       <>
-        <Stack direction="row" flexWrap="wrap" justifyContent="start" gap={2}>
+        <Stack direction={direction || "row"} flexWrap="wrap" justifyContent="start" gap={2}>
           {
             videos.map(
               (item, key) => {
@@ -27,4 +32,4 @@ const Video = ({videos}) => {
   )
 }
 
-export default Video
+export default Video;

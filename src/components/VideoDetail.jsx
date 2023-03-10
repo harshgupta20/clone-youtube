@@ -1,8 +1,81 @@
-import React from 'react'
+import React from 'react';
+
+import { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import ReactPlayer from 'react-player';
+import { Typography, Box, Stack } from '@mui/material';
+import { CheckCircle } from '@mui/icons-material';
+
+import Video from "./Video.jsx";
+import { fetchFromAPI } from '../utils/FetchFromAPI';
 
 const VideoDetail = () => {
+  
+  const [videoDetail, setVideoDetail] = useState(null);
+  const [videos, setVideos] = useState();
+  const {id} = useParams();
+
+  useEffect(()=>{
+    // to get the video from id
+   fetchFromAPI(`videos?part=snippet,statistics&id=${id}`).then((data)=> setVideoDetail(data.items[0])); 
+   // to get realted videos from id
+   fetchFromAPI(`search?part=snippet,relatedToVideoId=${id}&type=video`).then((data)=> setVideos(data.items)); 
+  },[id]);
+
+  console.log(videoDetail);
+
+  if(!videoDetail?.snippet){
+      return "Loading...";
+  }
+
+  // Destructureing the video data we get from fetch
+    const {snippet:{title, channelId, channelTitle}, statistics:{viewCount, likeCount}} = videoDetail;
+
+
   return (
-    <div>VideoDetail</div>
+    <>
+      <Box minHeight="95vh">
+        <Stack direction={{xs:'column', md:'row'}}>
+          <Box flex={1}>
+              <Box sx={{width:'100%', position:'sticky', top:'86px'}}>
+                <ReactPlayer url={`https://www.youtube.com/watch?v=${id}`} className="react-player" controls />
+                
+                {/* Video Title */}
+                <Typography color="#fff" variant='h5' fontWeight='bold' p={2}>
+                    {videoDetail.snippet.title}
+                </Typography>
+
+                <Stack direction="row" justifyContent="space-between" sx={{color:'#fff'}} py={1} px={2}>
+                  {/* Main Channel of video */}
+                  <Link to={`/channel/${channelId}`}>
+                      <Typography variant={{sm:'subtitle1', md:'h6'}} color="#fff">
+                        {channelTitle}
+                      </Typography>
+                  </Link>
+
+                  <Stack direction='row' gap='20px' alignItems='center'>
+                    {/* Video View */}
+                    <Typography variant='body1' sx={{opacity:'0.7'}}>
+                        {parseInt(viewCount).toLocaleString()} Views
+                    </Typography>
+                    {/* Video Likes */}
+                    <Typography variant='body1' sx={{opacity:'0.7'}}>
+                        {parseInt(likeCount).toLocaleString()} Likes
+                    </Typography>
+                  </Stack>
+                </Stack>
+              </Box>
+          </Box>
+        <Box px={2} py={{md:1, xs:5}} justifyContent='center' alignItems='center'>
+            <Video videos={videos} direction="column"/>
+        </Box>
+        </Stack>
+
+
+
+
+      </Box>
+    </>
   )
 }
 
